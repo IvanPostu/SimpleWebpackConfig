@@ -1,0 +1,16 @@
+@import "~normalize.css";
+@import "./roboto.css";
+
+html, body{
+  padding: 0;
+  margin: 0;
+  font-family: "RobotoRegular", sans-serif;
+}
+
+.image1{
+  background: url("../testfiles/beach-sea-coast-water-sand-rock-58319-pxhere.com.jpg");
+  background-size: cover;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
