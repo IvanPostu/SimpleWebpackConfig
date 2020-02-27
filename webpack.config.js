@@ -63,8 +63,21 @@ function babelOptions(preset) {
   return opts
 }
 
+function jsLoaders() {
+  const loaders = [{
+    loader: 'babel-loader',
+    options: babelOptions()
+  }]
 
-module.exports = (env, options) => {
+  if (isDev) {
+    loaders.push('eslint-loader')
+  }
+
+  return loaders
+}
+
+
+module.exports = /*(env, options)*/() => {
 
 
 
@@ -84,7 +97,7 @@ module.exports = (env, options) => {
       port: 8081,
       hot: isDev
     },
-    devtool: 'inline-source-map',
+    devtool: isDev ? 'source-map' : '',
     resolve: {
       extensions: ['.js', '.jpg'],//чтобы в ручную в импортах не писать .exten
       alias: {
@@ -117,10 +130,7 @@ module.exports = (env, options) => {
         {
           test: /\.js$/,
           exclude: /node_modules/,
-          loader: {
-            loader: 'babel-loader',
-            options: babelOptions()
-          },
+          use: jsLoaders(),
         },
         {
           test: /\.ts$/,
