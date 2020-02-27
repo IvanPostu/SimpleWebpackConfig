@@ -3,3 +3,9 @@ async function start() {
 }
 
 start().then(console.log)
+
+class ZZ {
+  static id = 'static field working'
+}
+
+console.log(ZZ.id)

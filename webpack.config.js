@@ -6,7 +6,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetWebpackPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserWebpackPlugin = require('terser-webpack-plugin')
 
-function optimization(isDev, isProd) {
+const isDev = process.env.NODE_ENV === 'development'
+const isProd = !isDev
+
+
+function optimization() {
   const config = {
     splitChunks: {
       chunks: 'all'
@@ -24,7 +28,7 @@ function optimization(isDev, isProd) {
   return config
 }
 
-function cssLoaders(isDev, isProd, extraLoader) {
+function cssLoaders(extraLoader) {
   const loaders = [
     {
       loader: MiniCssExtractPlugin.loader,
@@ -42,11 +46,27 @@ function cssLoaders(isDev, isProd, extraLoader) {
   return loaders
 }
 
+function babelOptions(preset) {
+  const opts = {
+    presets: [
+      '@babel/preset-env'
+    ],
+    plugins: [
+      '@babel/plugin-proposal-class-properties'
+    ]
+  }
+
+  if (preset) {
+    opts.presets.push(preset)
+  }
+
+  return opts
+}
+
 
 module.exports = (env, options) => {
 
-  const isDev = options.mode === 'development'
-  const isProd = !isDev
+
 
   console.log('Production: ', isProd)
   console.log('Development: ', isDev)
@@ -54,7 +74,7 @@ module.exports = (env, options) => {
   return {
     context: path.resolve(__dirname, 'src'),
     entry: {
-      main: ['@babel/polyfill', './main/index.js']
+      main: ['@babel/polyfill', './main/index.jsx']
     },
     output: {
       filename: isProd ? '[name].[contenthash].js' : '[name].[hash].js',
@@ -72,7 +92,7 @@ module.exports = (env, options) => {
         '@': path.resolve(__dirname, 'src'),
       }
     },
-    optimization: optimization(isDev, isProd),
+    optimization: optimization(),
     plugins: [
       new HTMLWebpackPlugin({
         template: './main/index.html',
@@ -99,27 +119,40 @@ module.exports = (env, options) => {
           exclude: /node_modules/,
           loader: {
             loader: 'babel-loader',
-            options: {
-              presets: [
-                '@babel/preset-env'
-              ]
-            }
+            options: babelOptions()
           },
+        },
+        {
+          test: /\.ts$/,
+          exclude: /node_modules/,
+          loader: {
+            loader: 'babel-loader',
+            options: babelOptions('@babel/preset-typescript')
 
+          },
+        },
+        {
+          test: /\.jsx$/,
+          exclude: /node_modules/,
+          loader: {
+            loader: 'babel-loader',
+            options: babelOptions('@babel/preset-react')
+
+          },
         },
         {
           test: /\.css$/,
-          use: cssLoaders(isDev, isProd)
+          use: cssLoaders()
 
         },
         {
           test: /\.less$/,
-          use: cssLoaders(isDev, isProd, 'less-loader')
+          use: cssLoaders('less-loader')
 
         },
         {
           test: /\.s[ac]ss$/,
-          use: cssLoaders(isDev, isProd, 'sass-loader')
+          use: cssLoaders('sass-loader')
 
         },
         {
