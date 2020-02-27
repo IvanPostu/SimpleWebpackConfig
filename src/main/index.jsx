@@ -27,3 +27,9 @@ const App = () => (
 )
 
 render(<App />, document.getElementById('root'))
+
+import('lodash').then(_ => {
+  console.log('Lodash: ', _.random(0, 32, true))
+})
+
+
