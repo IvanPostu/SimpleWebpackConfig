@@ -1,10 +1,13 @@
 {
+  "path-intellisense.mappings": {
+    "@": "${workspaceRoot}/src"
+  },
   "breadcrumbs.enabled": true,
   "debug.toolBarLocation": "floating",
   "editor.codeLens": false,
   "editor.cursorBlinking": "smooth",
   "editor.cursorStyle": "line",
-  "editor.fontSize": 15,
+  "editor.fontSize": 13,
   "editor.fontFamily": "Fira Code Medium",
   "editor.fontLigatures": true,
   "editor.formatOnPaste": true,
@@ -49,9 +52,6 @@
   "files.exclude": {
     "node_modules/": true,
     // "dist/": true
-  },
-  "editor.codeActionsOnSave": {
-    // "source.fixAll.eslint": true
   },
   "editor.formatOnSave": true,
 }
